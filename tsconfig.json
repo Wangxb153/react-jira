@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src", // 会在src文件夹下找路径
     "target": "es5",
     "lib": [
       "dom",
