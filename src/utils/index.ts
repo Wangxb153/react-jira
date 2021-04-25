@@ -40,7 +40,7 @@ export const useMount = (callback: () => void) => {
 // log()
 
 // 后面用泛型来规范类型
-export const useDebounce = (value: unknown, delay?: number): any => {
+export const useDebounce = <T>(value: T, delay?: number) => {
   const [ debouncedValue, setDebouncedValue ] = useState(value)
   console.log('value', value)
   useEffect(() => {
