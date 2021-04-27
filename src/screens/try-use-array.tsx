@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useMount, useArray } from 'utils'
 
 export const TsReactTest = () => {
