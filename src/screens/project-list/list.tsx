@@ -13,6 +13,8 @@ interface ListProps {
   users: User[]
 }
 export const List = ({ list, users }: ListProps) => {
+  let newList = Array.from(new Set(list))
+  console.log('newList', newList)
   return <table>
     <thead>
       <tr>
@@ -22,7 +24,7 @@ export const List = ({ list, users }: ListProps) => {
     </thead>
     <tbody>
       {
-        list.map(project => <tr key={project.personId}>
+        list.map(project => <tr key={project.id}>
           <td>{project.name}</td>
           <td>{users.find(user => user.id === project.personId)?.name || null}</td>
         </tr>)

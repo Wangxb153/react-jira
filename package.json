@@ -43,8 +43,12 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.6",
+    "jira-dev-tool": "^1.7.61",
     "json-server": "^0.16.3",
     "prettier": "^2.2.1",
     "qs": "^6.10.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
