@@ -4,6 +4,7 @@ import { Button } from 'antd'
 import { ProjectListScreen } from 'screens/project-list'
 import styled from '@emotion/styled'
 import { Row } from 'components/lib'
+import softwareLogo from 'assets/software-logo.svg'
 
 // grid和flex各自的应用场景
 // 1、要考虑，是一维布局还是二维布局
@@ -18,7 +19,7 @@ export const AuthenticatedApp = () => {
   return <Container>
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <h3>logo</h3>
+        <img src={softwareLogo} alt="" />
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>
