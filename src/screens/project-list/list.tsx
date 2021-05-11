@@ -16,7 +16,7 @@ interface ListProps {
   users: User[]
 }
 export const List = ({ list, users }: ListProps) => {
-  return <Table pagination={false} columns={
+  return <Table rowKey={"id"} pagination={false} columns={
     [
       {
         title: '名称',
@@ -30,7 +30,7 @@ export const List = ({ list, users }: ListProps) => {
       {
         title: '负责人',
         render(value, project) {
-          return <span>
+          return <span key={value}>
             {users.find(user => user.id === project.personId)?.name || null}
           </span>
         }
@@ -39,7 +39,7 @@ export const List = ({ list, users }: ListProps) => {
         title: '创建时间',
         render(value,project) {
           return (
-            <span>{project.created ? dayjs(project.created).format('YYYY-MM-DD') : '无'}</span>
+            <span key={value}>{project.created ? dayjs(project.created).format('YYYY-MM-DD') : '无'}</span>
           )
         }
       },

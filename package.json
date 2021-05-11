@@ -49,10 +49,11 @@
     "@emotion/styled": "^11.3.0",
     "@types/qs": "^6.9.6",
     "antd": "^4.15.3",
-    "jira-dev-tool": "^1.7.61",
+    "jira-dev-tool": "^1.6.59",
     "json-server": "^0.16.3",
     "prettier": "^2.2.1",
-    "qs": "^6.10.1"
+    "qs": "^6.10.1",
+    "react-query": "^3.16.0"
   },
   "msw": {
     "workerDirectory": "public"

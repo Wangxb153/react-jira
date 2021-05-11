@@ -25,19 +25,19 @@ export const UnauthenticatedApp = () => {
         isRegister ? <RegisterScreen/> : <LoginScreen/>
       }
       <Divider/>
-      <a onClick={() => setIsRegister(!isRegister)}>
+      <Button type="link" onClick={() => setIsRegister(!isRegister)}>
         {isRegister ? '已经有账号了？直接登录' : '没有账号？注册新账号'}
-      </a>
+      </Button>
     </ShadowCard>
     
   </Container>
 }
 export const LongButton = styled(Button)`
-  width: 100%
+  width: 100%;
 `
 const Title = styled.h2`
   margin-bottom: 2.4rem;
-  color: rgb(94, 108, 132)
+  color: rgb(94, 108, 132);
 `
 const Background = styled.div`
   position: absolute;
