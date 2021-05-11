@@ -11,7 +11,12 @@ const defaultInitialState: State<null> = {
   data: null,
   status: 'idle'
 }
-export const useAsync = <D>(initialState?: State<D>) => {
+
+const defaultConfig = {
+  throwOnError: false
+}
+export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig ) => {
+  const config = {...defaultConfig, ...initialConfig }
   const [ state, setState ] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState
@@ -40,7 +45,10 @@ export const useAsync = <D>(initialState?: State<D>) => {
         return data
       })
       .catch(error => {
+        // catch会消化异常，如果不主动抛出，外面是接收不到异常的
         setError(error)
+        console.log('error', error)
+        if (config.throwOnError) return Promise.reject(error);
         return error
       })
   }
