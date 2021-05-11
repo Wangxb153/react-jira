@@ -1,10 +1,11 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAuth } from 'context/auth-context'
 import React from 'react'
-import { Button } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import { ProjectListScreen } from 'screens/project-list'
 import styled from '@emotion/styled'
 import { Row } from 'components/lib'
-import softwareLogo from 'assets/software-logo.svg'
+import { ReactComponent as SoftwareLogo} from 'assets/software-logo.svg'
 
 // grid和flex各自的应用场景
 // 1、要考虑，是一维布局还是二维布局
@@ -15,16 +16,27 @@ import softwareLogo from 'assets/software-logo.svg'
 // 从内容出发，用flex
 // 从布局出发，用grid
 export const AuthenticatedApp = () => {
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   return <Container>
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <img src={softwareLogo} alt="" />
+        {/* <img src={softwareLogo} alt="" /> */}
+        <SoftwareLogo width={'18rem'} color='rgb(38, 132, 255)'/>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>
       <HeaderRight>
-        <Button onClick={logout}>登出</Button>
+        <Dropdown overlay={
+          <Menu>
+            <Menu.Item key="logout">
+              <a onClick={logout} href='a'>登出</a>
+            </Menu.Item>
+          </Menu>
+        }>
+          <a onClick={e => e.preventDefault()}>
+            Hi, {user?.name}
+          </a>
+        </Dropdown>
       </HeaderRight>
     </Header>
     {/* <Nav>
@@ -54,6 +66,9 @@ const Container = styled.div`
 `
 // grid-area 用来给grid子元素起名字
 const Header = styled(Row)`
+  padding: 3.2rem;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+  z-index: 1;
   /* grid-area: header;
   display: flex;
   flex-direction: row;
