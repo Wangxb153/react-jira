@@ -17,7 +17,11 @@ import { ReactComponent as SoftwareLogo} from 'assets/software-logo.svg'
 // 从布局出发，用grid
 export const AuthenticatedApp = () => {
   const { logout, user } = useAuth()
+  const value: any = undefined
   return <Container>
+    {
+      value.name
+    }
     <Header between={true}>
       <HeaderLeft gap={true}>
         {/* <img src={softwareLogo} alt="" /> */}
