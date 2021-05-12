@@ -6,6 +6,10 @@ import { ProjectListScreen } from 'screens/project-list'
 import styled from '@emotion/styled'
 import { Row } from 'components/lib'
 import { ReactComponent as SoftwareLogo} from 'assets/software-logo.svg'
+import { Navigate, Route, Routes } from 'react-router'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ProjectScreen } from 'screens/project'
+import { resetRoute } from 'utils'
 
 // grid和flex各自的应用场景
 // 1、要考虑，是一维布局还是二维布局
@@ -16,12 +20,33 @@ import { ReactComponent as SoftwareLogo} from 'assets/software-logo.svg'
 // 从内容出发，用flex
 // 从布局出发，用grid
 export const AuthenticatedApp = () => {
-  const { logout, user } = useAuth()
   return <Container>
+    <PageHeader/>
+    <Main>
+      <Router>
+        <Routes>
+          <Route path="/projects" element={<ProjectListScreen/>}></Route>
+          <Route path="/projects/:projectId/*" element={<ProjectScreen />}></Route>
+          <Navigate to="/projects"></Navigate>
+        </Routes>
+      </Router>
+
+    </Main>
+    {/* <Aside>
+      aside
+    </Aside>
+    <Footer>footer</Footer> */}
+  </Container>
+}
+const PageHeader = () => {
+  const { logout, user } = useAuth()
+  return (
     <Header between={true}>
       <HeaderLeft gap={true}>
         {/* <img src={softwareLogo} alt="" /> */}
-        <SoftwareLogo width={'18rem'} color='rgb(38, 132, 255)'/>
+        <Button type={'link'} onClick={resetRoute}>
+          <SoftwareLogo width={'18rem'} color='rgb(38, 132, 255)'/>
+        </Button>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>
@@ -40,19 +65,8 @@ export const AuthenticatedApp = () => {
         </Dropdown>
       </HeaderRight>
     </Header>
-    {/* <Nav>
-      nav
-    </Nav> */}
-    <Main>
-      <ProjectListScreen/>
-    </Main>
-    {/* <Aside>
-      aside
-    </Aside>
-    <Footer>footer</Footer> */}
-  </Container>
+  )
 }
-
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem calc(100vh - 6rem);

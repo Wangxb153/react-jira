@@ -3,6 +3,8 @@ import React from 'react'
 import { User } from './search-panel'
 import dayjs from 'dayjs'
 import { Project } from 'types/project'
+// react-router和react-router-dom 的关系 类似于react和react-dom的关系，react执行的是react内部的一些操作，react-dom是跟浏览器的一些操作
+import { Link } from 'react-router-dom'
 interface ListProps extends TableProps<Project> {
   users: User[]
 }
@@ -16,8 +18,10 @@ export const List = ({ users, ...props }: ListProps) => {
     [
       {
         title: '名称',
-        dataIndex: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name)
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        render: (value, project) => {
+          return <Link to={String(project.id)}>{project.name}</Link>
+        }
       },
       {
         title: '部门',
