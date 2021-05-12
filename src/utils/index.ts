@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export const isFalsy = (value: unknown) => value === 0 ? false : !value
 
@@ -74,4 +74,24 @@ export const useArray = <T>(initialArray: T[]) => {
       setValue(copy)
     }
   }
+}
+
+export const useDocumentTitle = (title: string, keepOnUmount: boolean = true) => {
+  // 使用useRef是的一开始读到的oldTitle不被改变
+  const oldTitle = useRef(document.title).current
+  // 页面加载时，oldTitle === 旧title 'React App'
+  // 加载后，oldTitle === 新title
+
+  useEffect(() => {
+    document.title = title
+  }, [title])
+
+  useEffect(() => {
+    return () => {
+      if(!keepOnUmount) {
+        // 如果不指定依赖，读到的就是一开始执行的旧title
+        document.title = oldTitle
+      }
+    }
+  }, [keepOnUmount, oldTitle])
 }
