@@ -5,6 +5,8 @@ import dayjs from 'dayjs'
 import { Project } from 'types/project'
 // react-router和react-router-dom 的关系 类似于react和react-dom的关系，react执行的是react内部的一些操作，react-dom是跟浏览器的一些操作
 import { Link } from 'react-router-dom'
+import { Pin } from 'components/pin'
+import { useEditProject } from 'utils/project'
 interface ListProps extends TableProps<Project> {
   users: User[]
 }
@@ -14,8 +16,22 @@ interface ListProps extends TableProps<Project> {
 // }
 // type PropsType = Omit<ListProps, 'users'> === props
 export const List = ({ users, ...props }: ListProps) => {
+
+  const { mutate } = useEditProject()
+  // const pinProject = (id:number, pin: boolean) => mutate({id, pin})
+  const pinProject = (id:number) => (pin: boolean) => mutate({id, pin})
   return <Table rowKey={"id"} pagination={false} columns={
     [
+      {
+        title: <Pin checked={true} disabled={true}/>,
+        render(value, project) {
+          // onCheckedChange 调用接口
+          // 函数式编程，project的获取在pin之前得到，函数柯里化
+          // return <Pin checked={project.pin} onCheckedChange={pin => pinProject(project.id, pin)}
+          return <Pin checked={project.pin} onCheckedChange={pinProject(project.id)}/>
+            // 不能直接在这里请求hook函数发送接口，hook的调用只能放在最外层}
+        }
+      },
       {
         title: '名称',
         sorter: (a, b) => a.name.localeCompare(b.name),

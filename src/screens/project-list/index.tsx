@@ -1,22 +1,21 @@
 import { SearchPanel } from './search-panel'
 import { List } from './list'
-import { useState } from "react"
 import React from 'react'
 import { useDebounce, useDocumentTitle } from 'utils'
 import styled from '@emotion/styled'
 import { Typography } from 'antd'
 import { useProjects } from 'utils/project'
 import { useUser } from 'utils/user'
+import { useProjectsSearchParams } from './util'
 
 export const ProjectListScreen = () => {
-  const [ param, setParam ] = useState({
-    name: '',
-    personId: ''
-  })
-  const debouncedParam = useDebounce(param, 200)
-  const { isLoading, error, data: list } = useProjects(debouncedParam)
-  const { data: users } = useUser()
   useDocumentTitle('项目列表', false)
+  // 基本类型，可以放到依赖里面；组件状态也可以放到依赖里面，非组件状态的对象，绝对不能放到组件依赖里。
+  //  https://codesandbox.io/s/keen-ware-tlz9s?file=/src/App.js
+  const [ param, setParam ] = useProjectsSearchParams()
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200))
+  const { data: users } = useUser()
+
   return <Container>
     <h1>项目列表</h1>
     
@@ -28,6 +27,10 @@ export const ProjectListScreen = () => {
   </Container>
 }
 
+ProjectListScreen.whyDidYouRender = true
+// class Test extends React.Component<any, any> {
+//   static whyDidYouRender = true
+// }
 const Container = styled.div`
   padding: 3.2rem
 `
