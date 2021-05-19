@@ -30,7 +30,6 @@ export const AuthenticatedApp = () => {
           <Navigate to="/projects"></Navigate>
         </Routes>
       </Router>
-
     </Main>
     {/* <Aside>
       aside

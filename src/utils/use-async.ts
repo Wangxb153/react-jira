@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useMountedRef } from "utils"
 
 interface State<D> {
   error: Error | null;
@@ -21,7 +22,13 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     ...defaultInitialState,
     ...initialState
   })
+  // useState中存储函数，会直接执行
+  // 惰性初始state， initialState参数只会在组件的初始渲染中起作用，后续渲染会被忽略。此函数只会在初始渲染时被调用
+  // useState直接传入函数的含义是：惰性初始化‘所以，要用useState保存函数，不能直接传入函数
+  // https://codesandbox.io/s/blissful-water-230u4?file=/src/App.js
+  const [ retry, setRetry ] = useState(() => () => {})
 
+  const mountedRef = useMountedRef()
   const setData = (data: D) => setState({
     data,
     status: 'success',
@@ -34,14 +41,21 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     error
   })
 
-  const run = (promise: Promise<D>) => {
+  const run = (promise: Promise<D>, runConfig?:{ retry: () => Promise<D> }) => {
     if(!promise || !promise.then) {
       throw new Error('请传入 Promise 类型数据')
     }
+    setRetry(() => () => {
+      if(runConfig?.retry) {
+        run(runConfig?.retry(), runConfig)
+      }
+    })
     setState({...state, status: 'loading'})
     return promise
       .then(data => {
-        setData(data)
+        if(mountedRef.current) {
+          setData(data)
+        }
         return data
       })
       .catch(error => {
@@ -60,6 +74,8 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     isLoading: state.status === 'loading',
     run,
     setData,
+    // retry被调用时，重新调用run
+    retry,
     setError,
     ...state
   }

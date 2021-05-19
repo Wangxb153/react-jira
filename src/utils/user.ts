@@ -10,7 +10,6 @@ export const useUser = (param?: Partial<User>) => {
 
   useMount(() => { 
     run(clients('users', {data: cleanObject(param || {})}))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   })
   return result
 }
