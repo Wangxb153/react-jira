@@ -1,5 +1,6 @@
 import { useAuth } from 'context/auth-context'
 import qs from 'qs'
+import { useCallback } from 'react'
 import * as auth from '../auth-provider'
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -50,7 +51,8 @@ export const useHttp = () => {
   const { user } = useAuth()
   // TODO 讲解ts操作符
   // utility type 的用法： 用泛型给它传入一个类型，然后utility type对这个类型进行某种的操作
-  return (...[endPoint, config]: Parameters<typeof http>) => http(endPoint, {...config, token: user?.token})
+  return useCallback(
+    (...[endPoint, config]: Parameters<typeof http>) => http(endPoint, {...config, token: user?.token}), [user?.token])
   // return ([endPoint, config]: [string, Config]) => http(endPoint, {...config, token: user?.token})
 }
 
