@@ -1,4 +1,4 @@
-import { Table, TableProps } from 'antd'
+import { Dropdown, Menu, Table, TableProps } from 'antd'
 import React from 'react'
 import { User } from './search-panel'
 import dayjs from 'dayjs'
@@ -7,9 +7,11 @@ import { Project } from 'types/project'
 import { Link } from 'react-router-dom'
 import { Pin } from 'components/pin'
 import { useEditProject } from 'utils/project'
+import { ButtonNoPadding } from 'components/lib'
 interface ListProps extends TableProps<Project> {
   users: User[],
-  refresh?: () => void
+  refresh?: () => void,
+  setProjectModalOpen: (isOpen: true) => void
 }
 // interface ListProps  {
 //   list: Project[],
@@ -60,6 +62,19 @@ export const List = ({ users, ...props }: ListProps) => {
           )
         }
       },
+      {
+        render(value, project) {
+          return <Dropdown overlay={
+            <Menu>
+              <Menu.Item key={'edit'}>
+                <ButtonNoPadding type={'link'} onClick={() => props.setProjectModalOpen(true)}>编辑</ButtonNoPadding>
+              </Menu.Item>
+            </Menu>
+          }>
+            <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
+          </Dropdown>
+        }
+      }
     ]}
     {...props}
     ></Table>

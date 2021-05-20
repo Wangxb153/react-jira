@@ -4,11 +4,12 @@ import { cleanObject } from "utils"
 import { useHttp } from "./http"
 import { useAsync } from "./use-async"
 
-export const useProjects = (parma: Partial<Project>) => {
+export const useProjects = (parma?: Partial<Project>) => {
   const clients = useHttp()
   const { run, ...result } = useAsync<Project[]>()
   const fetchProjects = useCallback(
-    () => clients('projects', {data: cleanObject(parma)}), [clients, parma])
+    () => clients('projects', {data: cleanObject(parma)}), [clients, parma]
+  )
   useEffect(() => {
     run((fetchProjects()), {
       retry: fetchProjects
