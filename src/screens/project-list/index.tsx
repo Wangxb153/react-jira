@@ -7,20 +7,27 @@ import { Typography } from 'antd'
 import { useProjects } from 'utils/project'
 import { useUser } from 'utils/user'
 import { useProjectsSearchParams } from './util'
-import { Row } from 'components/lib'
+import { ButtonNoPadding, Row } from 'components/lib'
+import { useDispatch } from 'react-redux'
+import { projectListActions } from './project-list-slice'
 
-export const ProjectListScreen = (props: {projectButton: JSX.Element}) => {
+export const ProjectListScreen = () => {
   useDocumentTitle('项目列表', false)
   // 基本类型，可以放到依赖里面；组件状态也可以放到依赖里面，非组件状态的对象，绝对不能放到组件依赖里。
   //  https://codesandbox.io/s/keen-ware-tlz9s?file=/src/App.js
   const [ param, setParam ] = useProjectsSearchParams()
   const { isLoading, error, data: list, retry } = useProjects(useDebounce(param, 200))
   const { data: users } = useUser()
-
+  const dispatch = useDispatch()
   return <Container>
     <Row between={true}>
       <h1>项目列表</h1>
-      {props.projectButton}
+      <ButtonNoPadding
+        onClick={() => dispatch(projectListActions.openProjectModal())}
+        type={'link'}
+      >
+        创建项目
+      </ButtonNoPadding>
     </Row>
     
     <SearchPanel param={param} setParam={setParam} users={users || []}/>
@@ -32,7 +39,6 @@ export const ProjectListScreen = (props: {projectButton: JSX.Element}) => {
       dataSource={list || []} 
       loading={isLoading} 
       refresh={retry}
-      projectButton={props.projectButton}
     />
   </Container>
 }
