@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAuth } from 'context/auth-context'
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Dropdown, Menu } from 'antd'
 import { ProjectListScreen } from 'screens/project-list'
 import styled from '@emotion/styled'
@@ -22,27 +22,21 @@ import { ProjectPopover } from 'components/project-popover'
 // 从内容出发，用flex
 // 从布局出发，用grid
 export const AuthenticatedApp = () => {
-  const [ projectModalOpen, setProjectModalOpen ] = useState(false)
   return <Container>
-    <PageHeader projectButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type={'link'}>创建项目</ButtonNoPadding>}/>
-    {/* <Button onClick={() => setProjectModalOpen(true)}>打开</Button> */}
-    <Main>
-      <Router>
-        <Routes>
-          <Route path="/projects" element={<ProjectListScreen projectButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type={'link'}>创建项目</ButtonNoPadding>}/>}></Route>
-          <Route path="/projects/:projectId/*" element={<ProjectScreen />}></Route>
-          <Navigate to="/projects"></Navigate>
-        </Routes>
-      </Router>
-    </Main>
-    {/* <Aside>
-      aside
-    </Aside>
-    <Footer>footer</Footer> */}
-    <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}/>
+    <Router>
+      <PageHeader/>
+      <Main>
+          <Routes>
+            <Route path="/projects" element={<ProjectListScreen/>}></Route>
+            <Route path="/projects/:projectId/*" element={<ProjectScreen />}></Route>
+            <Navigate to="/projects"></Navigate>
+          </Routes>
+      </Main>
+      <ProjectModal/>
+    </Router>
   </Container>
 }
-const PageHeader = (props: {projectButton: JSX.Element}) => {
+const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -50,7 +44,7 @@ const PageHeader = (props: {projectButton: JSX.Element}) => {
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
           <SoftwareLogo width={'18rem'} color='rgb(38, 132, 255)'/>
         </ButtonNoPadding>
-        <ProjectPopover projectButton={props.projectButton}/>
+        <ProjectPopover/>
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
