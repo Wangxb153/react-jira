@@ -33,7 +33,7 @@ export const ProjectListScreen = () => {
   </Container>
 }
 
-ProjectListScreen.whyDidYouRender = true
+ProjectListScreen.whyDidYouRender = false
 // class Test extends React.Component<any, any> {
 //   static whyDidYouRender = true
 // }

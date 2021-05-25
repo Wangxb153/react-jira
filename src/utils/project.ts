@@ -51,7 +51,7 @@ export const useAddProject = () => {
   const client = useHttp()
   const queryClient = useQueryClient()
   return useMutation(
-    (params: Partial<Project>) => client(`projects/${params.id}`, {
+    (params: Partial<Project>) => client(`projects`, {
       data: params,
       method: 'post'
     }), {
@@ -69,4 +69,16 @@ export const useAddProject = () => {
   //   mutate,
   //   ...asyncResult
   // }
+}
+
+export const useProject = (id?: number) => {
+  const client = useHttp()
+  return useQuery<Project>(
+    ['project', {id}],
+    () => client(`projects/${id}`),
+    {
+      // 在id有值的时候才会请求useQuery
+      enabled: Boolean(id)
+    }
+  )
 }
