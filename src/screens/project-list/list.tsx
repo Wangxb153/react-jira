@@ -10,8 +10,7 @@ import { useEditProject } from 'utils/project'
 import { ButtonNoPadding } from 'components/lib'
 import { useProjectModal } from './util'
 interface ListProps extends TableProps<Project> {
-  users: User[],
-  refresh?: () => void
+  users: User[]
 }
 // interface ListProps  {
 //   list: Project[],
@@ -22,7 +21,7 @@ export const List = ({ users, ...props }: ListProps) => {
 
   const { mutate } = useEditProject()
   // const pinProject = (id:number, pin: boolean) => mutate({id, pin})
-  const pinProject = (id:number) => (pin: boolean) => mutate({id, pin}).then(props.refresh)
+  const pinProject = (id:number) => (pin: boolean) => mutate({id, pin})
   const { open } = useProjectModal()
   return <Table rowKey={"id"} pagination={false} columns={
     [

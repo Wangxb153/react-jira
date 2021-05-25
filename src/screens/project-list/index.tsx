@@ -3,11 +3,10 @@ import { List } from './list'
 import React from 'react'
 import { useDebounce, useDocumentTitle } from 'utils'
 import styled from '@emotion/styled'
-import { Typography } from 'antd'
 import { useProjects } from 'utils/project'
 import { useUser } from 'utils/user'
 import { useProjectModal, useProjectsSearchParams } from './util'
-import { ButtonNoPadding, Row } from 'components/lib'
+import { ButtonNoPadding, ErrorBox, Row } from 'components/lib'
 
 export const ProjectListScreen = () => {
   useDocumentTitle('项目列表', false)
@@ -15,7 +14,7 @@ export const ProjectListScreen = () => {
   //  https://codesandbox.io/s/keen-ware-tlz9s?file=/src/App.js
   const [ param, setParam ] = useProjectsSearchParams()
   const { open } = useProjectModal()
-  const { isLoading, error, data: list, retry } = useProjects(useDebounce(param, 200))
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200))
   const { data: users } = useUser()
 
   return <Container>
@@ -25,14 +24,11 @@ export const ProjectListScreen = () => {
     </Row>
     
     <SearchPanel param={param} setParam={setParam} users={users || []}/>
-    {
-      error ? <Typography.Text type={"danger"}>{error.message}</Typography.Text> : null
-    }
+    <ErrorBox error={error}/>
     <List 
       users={users || []} 
       dataSource={list || []} 
       loading={isLoading} 
-      refresh={retry}
     />
   </Container>
 }
