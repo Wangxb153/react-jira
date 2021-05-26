@@ -2,14 +2,28 @@ import { useMemo } from "react"
 import { useProject } from "utils/project"
 import { useSetUrlSearchParam, useUrlQueryParam } from "utils/url"
 
+// export const useProjectsSearchParams = () => {
+//   const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+//   return [
+//     useMemo(() => (
+//       {...param, personId: Number(param.personId) || undefined}
+//     ), [param]),
+//     setParam
+//   ] as const
+// }
 export const useProjectsSearchParams = () => {
-  const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   return [
-    useMemo(() => (
-      {...param, personId: Number(param.personId) || undefined}
-    ), [param]),
-    setParam
-  ] as const
+    useMemo(
+      () => ({ ...param, personId: Number(param.personId) || undefined }),
+      [param]
+    ),
+    setParam,
+  ] as const;
+};
+export const useProjectQueryKey = () => {
+  const [ params ] = useProjectsSearchParams()
+  return ['projects', params]
 }
 
 export const useProjectModal = () => {
@@ -22,7 +36,6 @@ export const useProjectModal = () => {
   const setUrlParams = useSetUrlSearchParam();
   const close = () => setUrlParams({ projectCreate: "", editingProjectId: "" })
   const startEdit = (id: number) => setEditingProjectId({editingProjectId: id})
-  console.log('Boolean(editingProjectId)', projectCreate === 'true', Boolean(editingProjectId), projectCreate === 'true' || Boolean(editingProjectId))
   return {
     projectModalOpen: projectCreate === 'true' || Boolean(editingProjectId),
     open,

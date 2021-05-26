@@ -73,7 +73,6 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
       .catch(error => {
         // catch会消化异常，如果不主动抛出，外面是接收不到异常的
         setError(error)
-        console.log('error', error)
         if (config.throwOnError) return Promise.reject(error);
         return error
       })

@@ -37,7 +37,6 @@ export const Test = () => {
   }, [num])
   // 无论num add到了多少，这边console出来的num都是0， 原因是这个useEffect和useMount都只会在函数执行的时候执行一次
   useEffect(() => {
-    return console.log(num)
   }, [num])
 
   return <div>

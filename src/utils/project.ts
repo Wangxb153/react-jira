@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { QueryKey, useMutation, useQuery } from "react-query"
 import { Project } from "types/project"
 import { cleanObject } from "utils"
 import { useHttp } from "./http"
+import { useAddConfig, useDeleteConfig, useEditConfig } from "./use-optimistic-options"
 
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp()
@@ -21,24 +22,53 @@ export const useProjects = (param?: Partial<Project>) => {
   // },[parma, fetchProjects, run])
   // return result
 }
-
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+  return useMutation(
+    (params: Partial<Project>) =>
+      client(`projects/${params.id}`, {
+        method: "PATCH",
+        data: params,
+      }),
+    useEditConfig(queryKey)
+  );
+};
+// export const useEditProject = (queryKey: QueryKey) => {
+//   // const { run, ...asyncResult } = useAsync()
+//   console.log('queryKey', queryKey)
+//   const client = useHttp()
+//   return useMutation(
+//     (params: Partial<Project>) => client(`projects/${params.id}`, {
+//       data: params,
+//       method: 'patch'
+//     }),
+//     useEditConfig(queryKey)
+//   )
+//   // const mutate = (params: Partial<Project>) => {
+//   //   return run(client(`projects/${params.id}`, {
+//   //     data: params,
+//   //     method: 'patch'
+//   //   }))
+//   // }
+//   // return {
+//   //   mutate,
+//   //   ...asyncResult
+//   // }
+// }
+export const useAddProject = (queryKey: QueryKey) => {
   // const { run, ...asyncResult } = useAsync()
   const client = useHttp()
-  const queryClient = useQueryClient()
   return useMutation(
-    (params: Partial<Project>) => client(`projects/${params.id}`, {
+    (params: Partial<Project>) => client(`projects`, {
       data: params,
-      method: 'patch'
-    }), {
-      // 编辑成功后刷新数据
-      onSuccess: () => queryClient.invalidateQueries('projects')
-    }
+      method: 'post'
+    }),
+    useAddConfig(queryKey)
   )
   // const mutate = (params: Partial<Project>) => {
   //   return run(client(`projects/${params.id}`, {
   //     data: params,
-  //     method: 'patch'
+  //     method: 'post'
   //   }))
   // }
   // return {
@@ -46,18 +76,16 @@ export const useEditProject = () => {
   //   ...asyncResult
   // }
 }
-export const useAddProject = () => {
+
+export const useDeleteProject = (queryKey: QueryKey) => {
   // const { run, ...asyncResult } = useAsync()
   const client = useHttp()
-  const queryClient = useQueryClient()
   return useMutation(
-    (params: Partial<Project>) => client(`projects`, {
-      data: params,
-      method: 'post'
-    }), {
-      // 编辑成功后刷新数据
-      onSuccess: () => queryClient.invalidateQueries('projects')
-    }
+    ({ id }: { id: number }) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   )
   // const mutate = (params: Partial<Project>) => {
   //   return run(client(`projects/${params.id}`, {

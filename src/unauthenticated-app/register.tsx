@@ -16,7 +16,6 @@ export const  RegisterScreen = ({onError} : { onError: (error: Error) => void })
     try {
       run(register(values))
     } catch(e) {
-      console.log(e)
       onError(e)
     }
   }

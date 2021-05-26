@@ -43,7 +43,6 @@ export const useMount = (callback: () => void) => {
 // 后面用泛型来规范类型
 export const useDebounce = <T>(value: T, delay?: number) => {
   const [ debouncedValue, setDebouncedValue ] = useState(value)
-  console.log('value', value)
   useEffect(() => {
     // 每次在value变化以后，设置一个定时器
     const timeout = setTimeout(() => setDebouncedValue(value), delay)
@@ -67,9 +66,7 @@ export const useArray = <T>(initialArray: T[]) => {
     add: (item: T) => setValue([...value,item]),
     clear: () => setValue([]),
     removeIndex: (index: number) => {
-      console.log(index)
       const copy = [...value]
-      console.log('copy', copy)
       copy.splice(index, 1)
       setValue(copy)
     }
@@ -97,6 +94,24 @@ export const useDocumentTitle = (title: string, keepOnUmount: boolean = true) =>
 }
 
 export const resetRoute = () => window.location.href = window.location.origin
+
+/**
+ * 传入一个对象，和键集合，返回对应的对象中的键值对
+ * @param obj
+ * @param keys
+ */
+ export const subset = <
+ O extends { [key in string]: unknown },
+ K extends keyof O
+>(
+ obj: O,
+ keys: K[]
+) => {
+ const filteredEntries = Object.entries(obj).filter(([key]) =>
+   keys.includes(key as K)
+ );
+ return Object.fromEntries(filteredEntries) as Pick<O, K>;
+};
 
 // 返回组件的挂载状态， 如果还没有挂载或者已经卸载，返回false，反之，返回true
 export const useMountedRef = () => {
